@@ -1,0 +1,33 @@
+{
+  "type": "datasource",
+  "name": "Bolt-kafka",
+  "id": "boltanalytics-kafka-datasource",
+  "metrics": true,
+  "backend": false,
+  "alerting": false,
+  "executable": "boltanalytics-backend-plugin",
+
+  "info": {
+    "description": "Bolt datasource",
+    "author": {
+      "name": "Bolt Analytics"
+    },
+    "keywords": ["Bolt"],
+    "logos": {
+      "small": "img/Bolt-Logo.svg",
+      "large": "img/Bolt-Logo.svg"
+    },
+    "links": [
+      {"name": "Website", "url": "https://github.com/PT10/bolt_grafana_plugin"},
+      {"name": "License", "url": "https://github.com/PT10/bolt_grafana_plugin/blob/master/LICENSE"}
+    ],
+    "screenshots": [],
+    "version": "%VERSION%",
+    "updated": "%TODAY%"
+  },
+
+  "dependencies": {
+    "grafanaVersion": "6.3.x",
+    "plugins": []
+  }
+}

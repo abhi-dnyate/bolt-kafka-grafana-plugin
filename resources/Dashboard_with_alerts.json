@@ -1,0 +1,468 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": "-- Grafana --",
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "gnetId": null,
+  "graphTooltip": 0,
+  "id": 25,
+  "links": [],
+  "panels": [
+    {
+      "alert": {
+        "alertRuleTags": {},
+        "conditions": [
+          {
+            "evaluator": {
+              "params": [
+                1
+              ],
+              "type": "gt"
+            },
+            "operator": {
+              "type": "and"
+            },
+            "query": {
+              "params": [
+                "D",
+                "120m",
+                "now-119m"
+              ]
+            },
+            "reducer": {
+              "params": [],
+              "type": "max"
+            },
+            "type": "query"
+          },
+          {
+            "evaluator": {
+              "params": [
+                10
+              ],
+              "type": "gt"
+            },
+            "operator": {
+              "type": "and"
+            },
+            "query": {
+              "params": [
+                "B",
+                "120m",
+                "now-119m"
+              ]
+            },
+            "reducer": {
+              "params": [],
+              "type": "max"
+            },
+            "type": "query"
+          }
+        ],
+        "executionErrorState": "alerting",
+        "for": "0m",
+        "frequency": "1m",
+        "handler": 1,
+        "name": "Node Export server netstat alert",
+        "noDataState": "keep_state",
+        "notifications": [
+          {
+            "uid": "DR7XbnJWk"
+          },
+          {
+            "uid": "whj15s1Zz"
+          }
+        ]
+      },
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "Bolt-34.13-new",
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 9,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 4,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "alias": "/anomaly/",
+          "color": "#C4162A",
+          "lines": false,
+          "points": true
+        },
+        {
+          "alias": "/score/",
+          "lines": false,
+          "points": true,
+          "yaxis": 2
+        }
+      ],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "aggInterval": "+1HOUR",
+          "collection": "bolt_an",
+          "fl": "score_value",
+          "groupEnabled": "false",
+          "indvAnOutField": "all",
+          "numRows": 100,
+          "query": "jobId:\"Netstat_localhost_9100_Node_Exporter_Server_Metrics\"",
+          "queryType": "chart",
+          "refId": "A",
+          "rexOutFields": "collection,shard,replica,core,handler,params,hits,qtime",
+          "rexQuery": "\\s*.*\\s*\\[c\\:(.*)\\ss\\:(.*)\\sr\\:(.*)\\sx\\:(.*)\\]\\s*o.a.s.c.S.SlowRequest.*path=(.*)\\s*params=\\{(.*)\\}\\s*.*hits=(.*)\\s*status.*QTime=(.*)",
+          "start": 0
+        },
+        {
+          "aggInterval": "+1HOUR",
+          "collection": "bolt_an",
+          "fl": "actual_value",
+          "groupEnabled": "false",
+          "indvAnOutField": "all",
+          "numRows": 100,
+          "query": "jobId:\"Netstat_localhost_9100_Node_Exporter_Server_Metrics\"",
+          "queryType": "chart",
+          "refId": "B",
+          "rexOutFields": "collection,shard,replica,core,handler,params,hits,qtime",
+          "rexQuery": "\\s*.*\\s*\\[c\\:(.*)\\ss\\:(.*)\\sr\\:(.*)\\sx\\:(.*)\\]\\s*o.a.s.c.S.SlowRequest.*path=(.*)\\s*params=\\{(.*)\\}\\s*.*hits=(.*)\\s*status.*QTime=(.*)",
+          "start": 0
+        },
+        {
+          "aggInterval": "+1HOUR",
+          "collection": "bolt_an",
+          "fl": "expected_value",
+          "groupEnabled": "false",
+          "indvAnOutField": "all",
+          "numRows": 100,
+          "query": "jobId:\"Netstat_localhost_9100_Node_Exporter_Server_Metrics\"",
+          "queryType": "chart",
+          "refId": "C",
+          "rexOutFields": "collection,shard,replica,core,handler,params,hits,qtime",
+          "rexQuery": "\\s*.*\\s*\\[c\\:(.*)\\ss\\:(.*)\\sr\\:(.*)\\sx\\:(.*)\\]\\s*o.a.s.c.S.SlowRequest.*path=(.*)\\s*params=\\{(.*)\\}\\s*.*hits=(.*)\\s*status.*QTime=(.*)",
+          "start": 0
+        },
+        {
+          "aggInterval": "+1HOUR",
+          "collection": "bolt_an",
+          "fl": "is_anomaly:actual_value",
+          "groupEnabled": "false",
+          "indvAnOutField": "all",
+          "numRows": 100,
+          "query": "jobId:\"Netstat_localhost_9100_Node_Exporter_Server_Metrics\" AND is_anomaly: true",
+          "queryType": "chart",
+          "refId": "D",
+          "rexOutFields": "collection,shard,replica,core,handler,params,hits,qtime",
+          "rexQuery": "\\s*.*\\s*\\[c\\:(.*)\\ss\\:(.*)\\sr\\:(.*)\\sx\\:(.*)\\]\\s*o.a.s.c.S.SlowRequest.*path=(.*)\\s*params=\\{(.*)\\}\\s*.*hits=(.*)\\s*status.*QTime=(.*)",
+          "start": 0
+        }
+      ],
+      "thresholds": [
+        {
+          "colorMode": "critical",
+          "fill": true,
+          "line": true,
+          "op": "gt",
+          "value": 1
+        }
+      ],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Netstat on Node Exporter Server",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "alert": {
+        "alertRuleTags": {},
+        "conditions": [
+          {
+            "evaluator": {
+              "params": [
+                60
+              ],
+              "type": "gt"
+            },
+            "operator": {
+              "type": "and"
+            },
+            "query": {
+              "params": [
+                "D",
+                "3h",
+                "now"
+              ]
+            },
+            "reducer": {
+              "params": [],
+              "type": "max"
+            },
+            "type": "query"
+          }
+        ],
+        "executionErrorState": "alerting",
+        "for": "1m",
+        "frequency": "1m",
+        "handler": 1,
+        "name": "Bolt all anomalies alert",
+        "noDataState": "keep_state",
+        "notifications": [
+          {
+            "uid": "DR7XbnJWk"
+          },
+          {
+            "uid": "whj15s1Zz"
+          }
+        ]
+      },
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "Bolt-34.13-new",
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 11,
+        "w": 24,
+        "x": 0,
+        "y": 9
+      },
+      "id": 2,
+      "legend": {
+        "alignAsTable": true,
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "rightSide": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "alias": "/score/",
+          "lines": false,
+          "points": true,
+          "yaxis": 2
+        },
+        {
+          "alias": "/anomaly/",
+          "color": "#C4162A",
+          "lines": false,
+          "points": true
+        }
+      ],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "aggInterval": "+1HOUR",
+          "groupEnabled": "false",
+          "indvAnOutField": "actual",
+          "numRows": 100,
+          "query": "jobId:*",
+          "queryType": "indvAnomaly",
+          "refId": "A",
+          "rexOutFields": "collection,shard,replica,core,handler,params,hits,qtime",
+          "rexQuery": "\\s*.*\\s*\\[c\\:(.*)\\ss\\:(.*)\\sr\\:(.*)\\sx\\:(.*)\\]\\s*o.a.s.c.S.SlowRequest.*path=(.*)\\s*params=\\{(.*)\\}\\s*.*hits=(.*)\\s*status.*QTime=(.*)",
+          "start": 0
+        },
+        {
+          "aggInterval": "+1HOUR",
+          "groupEnabled": "false",
+          "indvAnOutField": "score",
+          "numRows": 100,
+          "query": "jobId:*",
+          "queryType": "indvAnomaly",
+          "refId": "B",
+          "rexOutFields": "collection,shard,replica,core,handler,params,hits,qtime",
+          "rexQuery": "\\s*.*\\s*\\[c\\:(.*)\\ss\\:(.*)\\sr\\:(.*)\\sx\\:(.*)\\]\\s*o.a.s.c.S.SlowRequest.*path=(.*)\\s*params=\\{(.*)\\}\\s*.*hits=(.*)\\s*status.*QTime=(.*)",
+          "start": 0
+        },
+        {
+          "aggInterval": "+1HOUR",
+          "groupEnabled": "false",
+          "indvAnOutField": "expected",
+          "numRows": 100,
+          "query": "jobId:*",
+          "queryType": "indvAnomaly",
+          "refId": "C",
+          "rexOutFields": "collection,shard,replica,core,handler,params,hits,qtime",
+          "rexQuery": "\\s*.*\\s*\\[c\\:(.*)\\ss\\:(.*)\\sr\\:(.*)\\sx\\:(.*)\\]\\s*o.a.s.c.S.SlowRequest.*path=(.*)\\s*params=\\{(.*)\\}\\s*.*hits=(.*)\\s*status.*QTime=(.*)",
+          "start": 0
+        },
+        {
+          "aggInterval": "+1HOUR",
+          "groupEnabled": "false",
+          "indvAnOutField": "anomaly",
+          "numRows": 100,
+          "query": "jobId:*",
+          "queryType": "indvAnomaly",
+          "refId": "D",
+          "rexOutFields": "collection,shard,replica,core,handler,params,hits,qtime",
+          "rexQuery": "\\s*.*\\s*\\[c\\:(.*)\\ss\\:(.*)\\sr\\:(.*)\\sx\\:(.*)\\]\\s*o.a.s.c.S.SlowRequest.*path=(.*)\\s*params=\\{(.*)\\}\\s*.*hits=(.*)\\s*status.*QTime=(.*)",
+          "start": 0
+        }
+      ],
+      "thresholds": [
+        {
+          "colorMode": "critical",
+          "fill": true,
+          "line": true,
+          "op": "gt",
+          "value": 60
+        }
+      ],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "All Anomalies",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    }
+  ],
+  "refresh": false,
+  "schemaVersion": 19,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-3h",
+    "to": "now"
+  },
+  "timepicker": {
+    "refresh_intervals": [
+      "5s",
+      "10s",
+      "30s",
+      "1m",
+      "5m",
+      "15m",
+      "30m",
+      "1h",
+      "2h",
+      "1d"
+    ]
+  },
+  "timezone": "",
+  "title": "Dashboard with alerts",
+  "uid": "o7byKjAWz",
+  "version": 34
+}

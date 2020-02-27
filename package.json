@@ -1,0 +1,27 @@
+{
+  "name": "bolt-datasource",
+  "version": "1.0.0",
+  "description": "Bolt Datasource",
+  "scripts": {
+    "build": "grafana-toolkit plugin:build",
+    "test": "grafana-toolkit plugin:test",
+    "dev": "grafana-toolkit plugin:dev",
+    "watch": "grafana-toolkit plugin:dev --watch"
+  },
+  "author": "Grafana Labs",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@grafana/data": "latest",
+    "@grafana/runtime": "latest",
+    "@grafana/toolkit": "next",
+    "@grafana/ui": "^6.3.2",
+    "@types/lodash": "^4.14.138",
+    "react": "^16.9.0",
+    "react-dom": "16.9.0",
+    "react-scripts": "3.1.1"
+  },
+  "dependencies": {
+    "yarn": "^1.17.3",
+    "lodash": "^4.17.4"
+  }
+}
