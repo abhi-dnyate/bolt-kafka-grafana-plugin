@@ -20,18 +20,28 @@ export class Utils {
   static processResponse(response: any, templateSrv: any) {
     const data = response.data;
     let seriesList: any[] = [];
-    const actualSentSeries: any[] = [];
+    /*const actualSentSeries: any[] = [];
     const actualReceivedcSeries: any[] = [];
 
     const sentDataMap: any = {};
     const receivedDataMap: any = {};
     const hostMap: any = {};
     const ruleMap: any = {};
-    const deniedDestinationMap: any = {};
+    const deniedDestinationMap: any = {};*/
 
     const fromTime = templateSrv.timeRange.from;
     const toTime = templateSrv.timeRange.to;
 
+    const histogramMap: any = {};
+    let valuesDataMap: any = {}; //ts,value
+    //let valuesDataMap: Map<number, String> = new Map<number, String>();
+    const countersMap: any = {}; //{'Bytes_Received',valuesDataMap}
+
+    /**
+     * 2 types of series:
+     * 1. metric vs timestamp
+     * 2. Count for metric, whose name is value of jobId (remove underscore )
+     */
     data.forEach((dataPoint: any) => {
       const decodedValue: any = JSON.parse(atob(dataPoint.value));
       const d: Date = new Date(decodedValue.timestamp);
@@ -41,7 +51,35 @@ export class Utils {
         return;
       }
 
-      if (decodedValue['jobId'] === 'Denied_Hosts') {
+      //for count series
+
+      let jobName: any = {};
+      if (decodedValue['COUNT'] != null) {
+        jobName = decodedValue['jobId'];
+        //jobName = jobName.replace(/_/g, '');
+        jobName = jobName.toUpperCase();
+
+        //todo remove these checks,
+        //the jobname and column name for count should be same.
+        /*if (jobName === 'DENIED_HOSTS') {
+          jobName = 'DENIEDHOST';
+        } else if (jobName === 'DENIED_DESTINATION_CITIES_V1') {
+          jobName = 'DESTINATION_CITIES';
+        } else {
+          jobName = jobName;
+        }*/
+
+        const jobValue = decodedValue[jobName];
+
+        if (jobValue != null) {
+          if (!Object.keys(histogramMap).includes(jobValue)) {
+            histogramMap[jobValue] = [];
+          }
+          histogramMap[jobValue].push([decodedValue['COUNT'], ts]);
+        }
+      }
+
+      /*if (decodedValue['jobId'] === 'Denied_Hosts') {
         const hostName = decodedValue['DENIEDHOST'];
         if (!Object.keys(hostMap).includes(hostName)) {
           hostMap[hostName] = [];
@@ -59,13 +97,53 @@ export class Utils {
           deniedDestinationMap[cityName] = [];
         }
         deniedDestinationMap[cityName].push([decodedValue['COUNT'], ts]);
-      } else {
+      } else{
         sentDataMap[ts] = decodedValue['Bytes_Sent'];
         receivedDataMap[ts] = decodedValue['Bytes_Received'];
-      }
+      }*/
+
+      //code to add other time series
+      Object.keys(decodedValue).forEach(key => {
+        if (key === 'timestamp' || key === 'jobId' || key === 'COUNT' || key === jobName) {
+          return;
+        }
+
+        if (!Object.keys(countersMap).includes(key)) {
+          countersMap[key] = {};
+        }
+
+        valuesDataMap = countersMap[key]; //todo is it ok to skip this check ?
+
+        /*if (!Object.keys(valuesDataMap).includes(ts)) {
+          valuesDataMap[ts] = {};
+        }*/ valuesDataMap[ts] = decodedValue[key];
+        countersMap[key] = valuesDataMap;
+      });
     });
 
-    if (Object.keys(hostMap).length > 0) {
+    //dump histogramMap and countersMap
+    if (Object.keys(histogramMap).length > 0) {
+      Object.keys(histogramMap).forEach(metric => {
+        seriesList.push({
+          target: metric,
+          datapoints: histogramMap[metric],
+        });
+      });
+    }
+
+    Object.keys(countersMap).forEach(metric => {
+      valuesDataMap = countersMap[metric];
+      const metricTimeseries: any[] = [];
+      Object.keys(valuesDataMap).forEach(timestamp => {
+        metricTimeseries.push([valuesDataMap[timestamp], timestamp]);
+      });
+      seriesList.push({
+        target: metric,
+        datapoints: metricTimeseries,
+      });
+    });
+
+    /*if (Object.keys(hostMap).length > 0) {
       Object.keys(hostMap).forEach(host => {
         seriesList.push({
           target: host,
@@ -96,15 +174,15 @@ export class Utils {
       });
 
       seriesList.push({
-        target: 'Bytes_sent',
+        target: 'total_sent',
         datapoints: actualSentSeries,
       });
 
       seriesList.push({
-        target: 'Bytes_received',
+        target: 'total_rcvd',
         datapoints: actualReceivedcSeries,
       });
-    }
+    }*/
 
     // Process line chart facet response
     /*
